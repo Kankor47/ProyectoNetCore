@@ -1,0 +1,77 @@
+﻿@model IEnumerable<BibliotecaUTN.Models.Prestamo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Prestamos</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FK_LibroPrestamo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FK_AlumnoPrestamo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Codigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaPrestamo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaLimite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaDevolucion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FK_StatusPrestamo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MontoMulta)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FK_LibroPrestamo.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FK_AlumnoPrestamo.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaPrestamo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaLimite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaDevolucion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FK_StatusPrestamo.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MontoMulta)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdPrestamo">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdPrestamo">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdPrestamo">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BibliotecaUTN.Areas.Identity.Data
+@inject SignInManager<BibliotecaUTNUser> SignInManager
+@inject UserManager<BibliotecaUTNUser> UserManager
+
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var claims = User.Claims;
+
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+            </li>
+
+            @if (User.IsInRole("Administrador"))
+            {
+                <li><a asp-area="" asp-controller="Alumnos" asp-action="Index">Alumnos</a></li>
+                <li><a asp-area="" asp-controller="Editoriales" asp-action="Index">Editoriales</a></li>
+                <li><a asp-area="" asp-controller="Paises" asp-action="Index">Paises</a></li>
+                <li><a asp-area="" asp-controller="Libros" asp-action="Index">Libros</a></li>
+                <li><a asp-area="" asp-controller="Autores" asp-action="Index">Autores</a></li>
+                <li><a asp-area="" asp-controller="Generos" asp-action="Index">Genero</a></li>
+                <li><a asp-area="" asp-controller="Prestamos" asp-action="Index">Prestamoms</a></li>
+                <li><a asp-area="" asp-controller="StatusPrestamos" asp-action="Index">Estatus Prestamos</a></li>
+            }
+        </ul>
+    </form>
+
+    
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    </ul>
+}

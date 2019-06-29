@@ -1,0 +1,128 @@
+﻿@model BibliotecaUTN.Clases.ClasePagina<Editorial>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Common;
+
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css"/>
+<link href="~/css/animate.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+@{
+    ViewData["Title"] = "Biblioteca UTN";
+}
+
+<div class="panel">
+    <div class="panel-heading text-white bg-primary fa-bold">
+        <h3> Editoriales</h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <a asp-action="Create" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i>Agregar Nuevo Registro</a>
+            </div>
+        </div>
+        <br/>
+
+        <form asp-action="Index" method="get">
+            <div class="row">
+                <div class="col-sm-6" style="display:inline-flex">
+                    <label style="display:inline-block; line-height:35px;">Mostrar &nbsp;</label>
+                    <select class="form-control input-sm" dara-val="true" id="PageSize" name="PageSize" style="width:auto">
+                        @foreach (var item in Model.Tamaño)
+                        {
+                            if (item.Key == (int)(ViewBag.CurrentPageSize))
+                            {
+                                <option value="@(item.Key)" selected="selected">@item.Value</option>
+                            }
+                            else
+                            {
+                                <option value="@(item.Key)">@item.Value</option>
+                            }
+                        }
+                    </select>
+                    <label style="display:inline-block; line-height:35px;">&nbsp; registros</label>
+                </div>
+
+                <div class="col-sm-6 text-right">
+                    Nombre: &nbsp; @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+                    &nbsp; <input type="submit" value="Buscar" class="btn btn-primary btn-sm"/>
+                </div>
+
+                <div><input type="hidden" value="@ViewBag.CurrentSort" name="currentSort"/></div>
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.ActionLink("Nombre","Index",new { sortOrder = ViewBag.SortNombre, currentFilter=ViewBag.CurrentFilter, pageSize=ViewBag.CurrentPageSize })
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Lista)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.IdEditorial" title="Editar" class="btn btn-info btn-xs" ><span><i class="fa fa-pencil-square-o"></i></span></a> &nbsp;
+                                <a asp-action="Details" asp-route-id="@item.IdEditorial"title="Detalle" class="btn btn-warning btn-xs" ><span><i class="fa fa-info-circle"></i></span></a> &nbsp;
+                                <a asp-action="Delete" asp-route-id="@item.IdEditorial"title="Borrar" class="btn btn-danger btn-xs" ><span><i class="fa fa-trash"></i></span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<div class="text-right">
+    @Html.PagedListPager((IPagedList)Model.Lista,
+        page => Url.Action("Index",
+            new
+            {
+                page,
+                sortOrder = ViewBag.CurrentSort,
+                currentFilter = ViewBag.CurrentFilter,
+                pageSize = ViewBag.CurrentPageSize
+            }),
+        new PagedListRenderOptions
+        {
+            LinkToFirstPageFormat = "Inicio",
+            LinkToPreviousPageFormat = "Anterior",
+            DisplayItemSliceAndTotal = true,
+            ItemSliceAndTotalFormat = "Mostrando {0} a {1} de {2} registros",
+            LinkToNextPageFormat = "Siguiente",
+            LinkToLastPageFormat = "Ultimo",
+            DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+            DisplayLinkToNextPage = PagedListDisplayMode.Always,
+            DisplayLinkToLastPage = PagedListDisplayMode.Always,
+            DisplayLinkToPreviousPage = PagedListDisplayMode.Always
+        })
+</div>
+
+@section Scripts{ 
+<script type="text/javascript" src="~/js/bootstrap-notify.js"/>
+<script type="text/javascript" src="~/js/helpers.js"/>
+
+<script type="text/javascript">
+    $('#PageSize').on('change', function (event) {
+        var form = $(event.target).parents('form');
+        form.submit();
+    });
+
+    var ac = getUrlParameter('ac');
+    var type = getUrlParameter('type');
+    if (type && ac) {
+        showNotification(ac, type);
+    }
+</script>
+}
